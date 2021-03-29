@@ -30,7 +30,7 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
         let costumerId = user.data.stripe_costumer_id
 
         if (!costumerId) {
-            const stripeCustomer = await stripe.customers.create({
+            const stripeCostomer = await stripe.customers.create({
                 email: session.user.email,
             })
 
@@ -39,14 +39,14 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
                     q.Ref(q.Collection('users'), user.ref.id),
                     {
                         data: {
-                            stripe_costumer_id: stripeCustomer.id
+                            stripe_costumer_id: stripeCostomer.id
                         }
                     }
                 )
             )   
             
             
-            costumerId = stripeCustomer.id
+            costumerId = stripeCostomer.id
         }
 
         const stripeCheckoutSession = await stripe.checkout.sessions.create({
